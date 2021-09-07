@@ -54,4 +54,18 @@ RSpec.describe "Merchants API" do
       expect(body[:data].size).to eq(20)
     end
   end
+
+  describe 'show' do
+    it 'can find a single merchant' do
+      create_list(:mock_merchant, 30)
+      merchant = Merchant.first
+
+      get "/api/v1/merchants/#{merchant.id}"
+
+      body = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).to be_successful
+      expect(body[:data][:id]).to eq("#{merchant.id}")
+    end
+  end
 end
