@@ -33,7 +33,7 @@ class Api::V1::ItemsController < ApplicationController
 
   def update
     item = Item.find(params[:id])
-binding.pry
+
     if item.update(item_params)
       render json: ItemSerializer.new(item)
     else

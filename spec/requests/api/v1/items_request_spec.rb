@@ -109,7 +109,8 @@ RSpec.describe "Items API" do
     end
 
     it 'cannot update item with invalid id' do
-      patch "/api/v1/items/#{0}", params: {
+      item = 0
+      patch "/api/v1/items/#{item}", params: {
                                           name: "Breakaway"
                                         }
 
