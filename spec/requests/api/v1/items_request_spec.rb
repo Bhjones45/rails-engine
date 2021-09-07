@@ -131,4 +131,22 @@ RSpec.describe "Items API" do
       expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
+
+  describe 'find all' do
+    it 'can find all items searching by name' do
+      create_list(:mock_item, 10, merchant: @merchant)
+      item = create(:mock_item, merchant: @merchant, name: "Breakaway")
+      item2 = create(:mock_item, merchant: @merchant, name: "Wreak")
+
+      get '/api/v1/items/find_all?name=reak'
+
+      body = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).to be_successful
+      expect(body[:data].first[:id]).to eq("#{item.id}")
+      expect(body[:data].last[:id]).to eq("#{item2.id}")
+      expect(body[:data].first[:attributes][:description]).to eq(item.description)
+      expect(body[:data].last[:attributes][:description]).to eq(item2.description)
+    end
+  end
 end
