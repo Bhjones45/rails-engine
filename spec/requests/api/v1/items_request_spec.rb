@@ -44,7 +44,7 @@ RSpec.describe "Items API" do
       expect(response).to be_successful
       expect(body[:data].size).to eq(37)
     end
-    
+
     it 'can take a negative param' do
       get '/api/v1/items', params: { page: 0 }
 
@@ -52,6 +52,22 @@ RSpec.describe "Items API" do
 
       expect(response).to be_successful
       expect(body[:data].size).to eq(20)
+    end
+  end
+
+  describe 'show' do
+    it 'can show a single item' do
+      create_list(:mock_item, 10, merchant: @merchant)
+      first_item = Item.first
+      get "/api/v1/items/#{first_item.id}"
+
+      body = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).to be_successful
+      expect(body[:data][:attributes][:name]).to eq(first_item.name)
+      expect(body[:data][:attributes][:description]).to eq(first_item.description)
+      expect(body[:data][:attributes][:unit_price]).to eq(first_item.unit_price)
+      expect(body[:data][:attributes][:merchant_id]).to eq(first_item.merchant_id)
     end
   end
 end
