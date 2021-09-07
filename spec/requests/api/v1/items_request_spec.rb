@@ -90,4 +90,15 @@ RSpec.describe "Items API" do
       expect(created_item[:data][:attributes][:merchant_id]).to eq(find_item.merchant_id)
     end
   end
+
+  describe 'delete' do
+    it 'can destroy an item' do
+      item = create(:mock_item, merchant: @merchant)
+
+      delete "/api/v1/items/#{item.id}"
+
+      expect(response).to be_successful
+      expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
 end
