@@ -48,6 +48,15 @@ class Api::V1::ItemsController < ApplicationController
     render json: Item.delete(params[:id])
   end
 
+  def find_all
+    items = Item.search(params[:name])
+    if items.empty?
+      render json: { data: [] }
+    else
+      render json: ItemSerializer.new(items)
+    end
+  end
+
   private
     def item_params
       params.permit(:name, :description, :unit_price, :merchant_id)
