@@ -6,3 +6,4 @@ FactoryBot.define do
 
     association :invoice, factory: :mock_invoice
   end
+end
