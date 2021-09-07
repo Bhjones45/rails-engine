@@ -11,7 +11,7 @@ RSpec.describe "Item merchant" do
 
       body = JSON.parse(response.body, symbolize_names: true)
 
-      expect(body[:data][:id]).to eq(merchant.id)
+      expect(body[:data][:id]).to eq(merchant.id.to_s)
     end
   end
 end
