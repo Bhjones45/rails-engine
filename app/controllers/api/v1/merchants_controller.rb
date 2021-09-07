@@ -23,4 +23,14 @@ class Api::V1::MerchantsController < ApplicationController
     render json: MerchantSerializer.new(merchant)
 
   end
+
+  def find
+    merchant = Merchant.search(params[:name])
+
+    if merchant.nil?
+      render json: { data: [] }, status: 400
+    else
+      render json: MerchantSerializer.new(merchant)
+    end
+  end
 end
