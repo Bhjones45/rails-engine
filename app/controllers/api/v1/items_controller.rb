@@ -17,4 +17,9 @@ class Api::V1::ItemsController < ApplicationController
     items = Item.offset((page - 1) * limit).limit(limit)
     render json: ItemSerializer.new(items)
   end
+
+  def show
+    item = Item.find(params[:id])
+    render json: ItemSerializer.new(item)
+  end
 end
