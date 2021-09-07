@@ -91,6 +91,24 @@ RSpec.describe "Items API" do
     end
   end
 
+  describe 'update' do
+    it 'can update an item' do
+      item = create(:mock_item, merchant: @merchant)
+      original_item = Item.first.name
+      patch "/api/v1/items/#{item.id}", params: {
+                                          name: "Breakaway"
+                                        }
+
+      body = JSON.parse(response.body, symbolize_names: true)
+
+      updated_item = Item.find_by(id: item)
+
+      expect(response).to be_successful
+      expect(updated_item.name).to_not eq(original_item)
+      expect(updated_item.name).to eq("Breakaway")
+    end
+  end
+
   describe 'delete' do
     it 'can destroy an item' do
       item = create(:mock_item, merchant: @merchant)
