@@ -33,9 +33,14 @@ class Api::V1::ItemsController < ApplicationController
 
   def update
     item = Item.find(params[:id])
-
+binding.pry
     if item.update(item_params)
       render json: ItemSerializer.new(item)
+    else
+      render json: {
+               message: 'Not Found',
+               errors: ["Item with id##{params[:id]} could not be found"]
+      }
     end
   end
 

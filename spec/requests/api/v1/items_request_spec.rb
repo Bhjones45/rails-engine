@@ -107,6 +107,17 @@ RSpec.describe "Items API" do
       expect(updated_item.name).to_not eq(original_item)
       expect(updated_item.name).to eq("Breakaway")
     end
+
+    it 'cannot update item with invalid id' do
+      patch "/api/v1/items/#{0}", params: {
+                                          name: "Breakaway"
+                                        }
+
+      body = JSON.parse(response.body, symbolize_names: true)
+
+      expect(body[:message]).to eq('Not Found')
+      expect(response.status).to eq(404)
+     end
   end
 
   describe 'delete' do
