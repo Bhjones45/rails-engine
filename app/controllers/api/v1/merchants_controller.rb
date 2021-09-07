@@ -17,4 +17,10 @@ class Api::V1::MerchantsController < ApplicationController
     merchants = Merchant.offset((page - 1) * limit).limit(limit)
     render json: MerchantSerializer.new(merchants)
   end
+
+  def show
+    merchant = Merchant.find(params[:id])
+    render json: MerchantSerializer.new(merchant)
+
+  end
 end
