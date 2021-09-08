@@ -9,12 +9,12 @@ class Api::V1::MerchantsController < ApplicationController
     end
 
     if params[:per_page].nil?
-      limit = 20
+      limit_per_page = 20
     else
-      limit = params[:per_page].to_i
+      limit_per_page = params[:per_page].to_i
     end
 
-    merchants = Merchant.offset((page - 1) * limit).limit(limit)
+    merchants = Merchant.offset((page - 1) * limit_per_page).limit(limit_per_page)
     render json: MerchantSerializer.new(merchants)
   end
 
