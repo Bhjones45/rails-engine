@@ -55,5 +55,23 @@ RSpec.describe 'Revenue' do
       expect(body[:data].first[:type]).to eq("unshipped_order")
       expect(body[:data].first[:attributes][:potential_revenue]).to eq(40.0)
     end
+
+    it 'sad path: returns error if quantity value is left blank' do
+      get '/api/v1/revenue/unshipped', params: { quantity: ''}
+
+      body =JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(400)
+    end
+
+    it 'sad path: returns error if quantity value is a string' do
+      get '/api/v1/revenue/unshipped', params: { quantity: 'heyo'}
+
+      body =JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(400)
+    end
   end
 end
