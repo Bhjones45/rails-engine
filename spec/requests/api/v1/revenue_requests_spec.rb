@@ -33,15 +33,16 @@ RSpec.describe 'Revenue' do
 
   describe 'total revenue' do
     it 'can return total revenue of a merchant' do
-      merchant = Merchant.merchant_revenue(@merchant1.id).first
 
-      get "/api/v1/revenue/merchants/#{@merchant1.id}"
+      get "/api/v1/revenue/merchants", params: { quantity: 1 }
 
-      body = JSON.parse(response.body, symbolize_names: true)
+      merchants = body = JSON.parse(response.body, symbolize_names: true)
 
-      expect(body[:data].first[:id]).to eq("#{@merchant1.id}")
-      expect(body[:data].first[:type]).to eq("merchant_revenue")
-      expect(body[:data].first[:attributes][:revenue]).to eq(merchant.revenue)
+      merchants[:data].each do |merchant|
+        expect(merchant).to have_key(:attributes)
+        expect(merchant).to have_key(:type)
+        expect(merchant[:type]).to eq('merchant_name_revenue')
+      end
     end
   end
 
