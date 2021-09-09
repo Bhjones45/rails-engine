@@ -77,7 +77,7 @@ RSpec.describe "Merchants API" do
       get "/api/v1/merchants/find?name=akaw"
 
       body = JSON.parse(response.body, symbolize_names: true)
-
+      
       expect(body[:data].first[:id]).to eq("#{merchant.id}")
       expect(body[:data].first[:type]).to eq("merchant")
       expect(body[:data].first[:attributes][:name]).to eq(merchant.name)
@@ -87,7 +87,7 @@ RSpec.describe "Merchants API" do
       get "/api/v1/merchants/find?name=akaw"
 
       body = JSON.parse(response.body, symbolize_names: true)
-      
+
       expect(body[:data]).to eq([])
     end
   end
