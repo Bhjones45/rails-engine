@@ -12,7 +12,7 @@ Rails.application.routes.draw do
         resources :merchant, module: 'items', only: [:index]
       end
       scope :revenue do
-        get '/merchants/:id', to: 'revenue#merchant_total_revenue'
+        get '/merchants', to: 'revenue#merchant_total_revenue'
         get '/unshipped', to: 'revenue#unshipped_orders_revenue'
       end
     end
