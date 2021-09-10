@@ -27,10 +27,12 @@ class Api::V1::MerchantsController < ApplicationController
   def find
     merchant = Merchant.search(params[:name])
 
-    if merchant.nil?
-      render json: { data: [] }, status: 400
+    if merchant.nil? || params[:name] == ''
+      render json: { data: [] }, status: 200
+    elsif merchant.empty?
+      render json: { data: [] }, status: 200
     else
-      render json: MerchantSerializer.new(merchant)
+      render json: MerchantSerializer.new(merchant.first)
     end
   end
 end
