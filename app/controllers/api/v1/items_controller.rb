@@ -40,7 +40,7 @@ class Api::V1::ItemsController < ApplicationController
       render json: {
                message: 'Not Found',
                errors: ["Item with id##{params[:id]} could not be found"]
-      }
+             }
     end
   end
 
