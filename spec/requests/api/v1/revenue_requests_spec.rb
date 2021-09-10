@@ -44,13 +44,48 @@ RSpec.describe 'Revenue' do
         expect(merchant[:type]).to eq('merchant_name_revenue')
       end
     end
+
+    it 'can return total revenue of top two merchants' do
+
+      get "/api/v1/revenue/merchants", params: { quantity: 2 }
+
+      merchants = body = JSON.parse(response.body, symbolize_names: true)
+
+      merchants[:data].each do |merchant|
+        expect(merchant).to have_key(:attributes)
+        expect(merchant).to have_key(:type)
+        expect(merchant[:type]).to eq('merchant_name_revenue')
+      end
+    end
+
+    it 'can return total revenue of a merchant if quantity is too large' do
+
+      get "/api/v1/revenue/merchants", params: { quantity: 100000 }
+
+      merchants = body = JSON.parse(response.body, symbolize_names: true)
+
+      merchants[:data].each do |merchant|
+        expect(merchant).to have_key(:attributes)
+        expect(merchant).to have_key(:type)
+        expect(merchant[:type]).to eq('merchant_name_revenue')
+      end
+    end
+
+    it 'sad path: returns an error if quantity value is a string' do
+      get '/api/v1/revenue/merchants', params: { quantity: 'heyo' }
+
+      body = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(400)
+    end
   end
 
   describe 'unshipped orders potential revenue' do
     it 'can return potential revenue of unshipped orders' do
       get '/api/v1/revenue/unshipped'
 
-      body =JSON.parse(response.body, symbolize_names: true)
+      body = JSON.parse(response.body, symbolize_names: true)
 
       expect(body[:data].size).to eq(3)
       expect(body[:data].first[:type]).to eq("unshipped_order")
@@ -58,9 +93,9 @@ RSpec.describe 'Revenue' do
     end
 
     it 'sad path: returns error if quantity value is left blank' do
-      get '/api/v1/revenue/unshipped', params: { quantity: ''}
+      get '/api/v1/revenue/unshipped', params: { quantity: '' }
 
-      body =JSON.parse(response.body, symbolize_names: true)
+      body = JSON.parse(response.body, symbolize_names: true)
 
       expect(response).to_not be_successful
       expect(response.status).to eq(400)
