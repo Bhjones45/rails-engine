@@ -17,11 +17,14 @@ class Merchant < ApplicationRecord
   end
 
   def self.top_revenue(quantity)
-    joins(:transactions, :invoice_items)
-    .select("merchants.id as id, merchants.name as name, sum(invoice_items.quantity * invoice_items.unit_price) as revenue")
-    .group(:name, :id)
+    select('merchants.id, merchants.name, sum(invoice_items.quantity * invoice_items.unit_price) as revenue')
+    .joins('INNER JOIN invoices ON invoices.merchant_id = merchants.id')
+    .joins('INNER JOIN transactions ON invoices.id = transactions.invoice_id')
+    .joins('INNER JOIN invoice_items ON invoice_items.invoice_id = invoices.id')
+    .where(transactions: { result: 'success' })
+    .where(invoices: { status: 'shipped' })
+    .group(:id)
     .order(revenue: :desc)
-    .where("invoices.status = ? and transactions.result = ?", 'shipped', 'success')
     .limit(quantity)
   end
 end
