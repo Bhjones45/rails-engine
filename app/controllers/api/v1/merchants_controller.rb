@@ -28,9 +28,9 @@ class Api::V1::MerchantsController < ApplicationController
     merchant = Merchant.search(params[:name])
 
     if merchant.nil? || params[:name] == ''
-      render json: { data: [] }, status: 400
+      render json: { data: [] }, status: 200
     elsif merchant.empty?
-      render json: { data: [] }, status: 400
+      render json: { data: [] }, status: 200
     else
       render json: MerchantSerializer.new(merchant.first)
     end
