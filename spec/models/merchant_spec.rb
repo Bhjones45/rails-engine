@@ -38,8 +38,8 @@ RSpec.describe Merchant do
         transactions2 = create(:mock_transaction, invoice: invoice2, result: 'success')
         transactions3 = create(:mock_transaction, invoice: invoice3, result: 'success')
 
-        top = Merchant.top_revenue(3).first
-        bottom = Merchant.top_revenue(3).last
+        top = Merchant.top_revenue.first
+        bottom = Merchant.top_revenue.last
 
         top_rev = Merchant.merchant_revenue(merchant2.id).first
         bottom_rev = Merchant.merchant_revenue(merchant1.id).first

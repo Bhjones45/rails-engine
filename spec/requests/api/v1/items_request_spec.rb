@@ -6,7 +6,7 @@ RSpec.describe "Items API" do
 
   describe 'index' do
     before(:each) do
-      create_list(:mock_item, 300, merchant: @merchant)
+      create_list(:mock_item, 200, merchant: @merchant)
     end
 
     it 'returns 20 items' do
@@ -107,6 +107,18 @@ RSpec.describe "Items API" do
       expect(updated_item.name).to_not eq(original_item)
       expect(updated_item.name).to eq("Breakaway")
     end
+
+    it 'cannot update item with invalid id' do
+      item = 0
+      patch "/api/v1/items/#{item}", params: {
+                                          name: "Breakaway"
+                                        }
+
+      body = JSON.parse(response.body, symbolize_names: true)
+
+      expect(body[:message]).to eq('Not Found')
+      expect(response.status).to eq(404)
+     end
   end
 
   describe 'delete' do

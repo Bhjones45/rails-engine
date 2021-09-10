@@ -70,6 +70,19 @@ RSpec.describe "Merchants API" do
   end
 
   describe 'find' do
+    it 'can find a merchant through a search' do
+      create_list(:mock_merchant, 30)
+      merchant = create(:mock_merchant, name: "Breakaway")
+
+      get "/api/v1/merchants/find?name=akaw"
+
+      body = JSON.parse(response.body, symbolize_names: true)
+      
+      expect(body[:data].first[:id]).to eq("#{merchant.id}")
+      expect(body[:data].first[:type]).to eq("merchant")
+      expect(body[:data].first[:attributes][:name]).to eq(merchant.name)
+    end
+
     it 'can return empty array if no merchant is found' do
       get "/api/v1/merchants/find?name=akaw"
 
